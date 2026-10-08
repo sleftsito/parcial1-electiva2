@@ -1,34 +1,27 @@
-name: Despliegue Automático a Surge
+name: Deploy to Surge
 
 on:
   push:
     branches:
-      - main  # Cambia por "master" si tu rama principal se llama así
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Descarga el código del repositorio en el servidor de GitHub
-      - name: Clonar repositorio
+      - name: Descargar repositorio
         uses: actions/checkout@v4
 
-      # 2. Configura Node.js en el entorno virtual
-      - name: Configurar Node.js
+      - name: Instalar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # 3. Instala dependencias y compila el proyecto (Solo si usas React/Vite/Vue, etc.)
-      # Si es HTML puro, puedes borrar o comentar esta sección de "Instalar y Compilar"
-      - name: Instalar y Compilar proyecto
-        run: |
-          npm ci
-          npm run build
+      - name: Instalar Surge
+        run: npm install --global surge
 
-      # 4. Publica en Surge de manera no interactiva usando tu token guardado
-      - name: Desplegar en Surge.sh
-        run: npx surge ./dist tu-dominio-personalizado.surge.sh
+      - name: Desplegar en Surge
+        run: surge ./ rubymartinezrosa-primer-parcial.surge.sh
         env:
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
